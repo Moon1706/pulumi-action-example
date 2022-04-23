@@ -1,0 +1,34 @@
+name: default
+
+on: [ push ]
+
+jobs:
+  init:
+    name: init
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["16.x"]
+    steps:
+    - uses: actions/checkout@v3
+    - name: "Auth to GCP"
+      id: auth
+      uses: google-github-actions/auth@v0
+      with:
+        credentials_json: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+    - name: "Set up Cloud SDK"
+      uses: google-github-actions/setup-gcloud@v0
+    - name: "Use Node.js ${{ matrix.node-version }}"
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: "Install NPM requirements"
+      run: npm install
+    - name: "Start Pulumi"
+      id: pulumi
+      uses: ./.github/actions/pulumi
+      with:
+        command: up
+        stack-name: artifactory-europe-west3
+        cloud-url: gs://pulumi-stack-gcp-lab-1-msharayau
+        upsert: true

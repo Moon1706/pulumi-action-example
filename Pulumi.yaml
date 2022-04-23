@@ -1,0 +1,10 @@
+name: gcp-ts-bucket
+runtime: nodejs
+template:
+  config:
+    gcp:project:
+      description: The Google Cloud project to deploy into
+      default: gcp-lab-1-msharayau
+    gcp:zone:
+      description: The Google Cloud zone
+      default: us-central1-a
