@@ -32,3 +32,5 @@ jobs:
         stack-name: artifactory-europe-west3
         cloud-url: gs://pulumi-stack-gcp-lab-1-msharayau
         upsert: true
+      env:
+        PULUMI_CONFIG_PASSPHRASE: ""
