@@ -24,6 +24,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: "Install NPM requirements"
       run: npm install
+    - uses: actions/checkout@v3
     - name: "Start Pulumi"
       id: pulumi
       uses: ./.github/actions/pulumi
