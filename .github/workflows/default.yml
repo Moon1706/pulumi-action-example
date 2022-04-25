@@ -6,6 +6,7 @@ jobs:
   init:
     name: init
     runs-on: ubuntu-latest
+    environment: dev
     strategy:
       matrix:
         node-version: ["16.x"]
@@ -37,7 +38,7 @@ jobs:
             value: 23458928gsdgergdfg34
             secret: false
           other_namename:
-            value: thiswillchangenothing
+            value: ${{ secrets.NAME }}
             secret: false
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
