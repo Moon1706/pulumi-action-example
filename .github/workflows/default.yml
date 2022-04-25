@@ -6,7 +6,7 @@ on:
     types: [ opened, reopened ]
   push:
     branches: [ dev ]
-  workflow_difpatch:
+  workflow_dispatch:
 
 jobs:
   init:
