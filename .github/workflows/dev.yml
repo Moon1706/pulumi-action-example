@@ -5,6 +5,8 @@ on:
     branches: [ dev ]
   pull_request:
     branches: [ dev ]
+  schedule:
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -14,7 +16,7 @@ jobs:
     environment: dev
     strategy:
       matrix:
-        node-version: ["16.x"]
+        node-version: ["14.x"]
     steps:
     - uses: actions/checkout@v3
     - name: "Auth to GCP"
