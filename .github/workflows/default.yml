@@ -1,6 +1,12 @@
 name: default
 
-on: [ pull_request ]
+on:
+  pull_request:
+    branches: [ dev ]
+    types: [ opened, reopened ]
+  push:
+    branches: [ dev ]
+  workflow_dispatch:
 
 jobs:
   init:
@@ -12,7 +18,6 @@ jobs:
         node-version: ["16.x"]
     steps:
     - uses: actions/checkout@v3
-    - run: echo ${{ github.event.pull_request.base.ref }}
     - name: "Auth to GCP"
       id: auth
       uses: google-github-actions/auth@v0
@@ -26,20 +31,20 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: "Install NPM requirements"
       run: npm install
-    - name: "Start Pulumi"
-      id: pulumi
+    - name: "Preview Pulumi"
+      uses: Moon1706/actions@master
+      with:
+        command: preview
+        stack-name: ${{ secret.STACK_NAME }}
+        cloud-url: ${{ secrets.CLOUD_URL }}
+      env:
+        PULUMI_CONFIG_PASSPHRASE: ""
+    - name: "Up Pulumi"
+      if: github.event_name == "workflow_dispatch"
       uses: Moon1706/actions@master
       with:
         command: up
-        stack-name: artifactory-europe-west3
-        cloud-url: gs://pulumi-stack-gcp-lab-1-msharayau
-        upsert: true
-        configMap: |
-          name:
-            value: 23458928gsdgergdfg34
-            secret: false
-          other_namename:
-            value: ${{ secrets.NAME }}
-            secret: false
+        stack-name: ${{ secret.STACK_NAME }}
+        cloud-url: ${{ secrets.CLOUD_URL }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
