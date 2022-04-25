@@ -6,13 +6,12 @@ jobs:
   init:
     name: init
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ github.event.pull_request.base.ref }}
     strategy:
       matrix:
         node-version: ["16.x"]
     steps:
     - uses: actions/checkout@v3
-    - run: echo ${{ github.event.pull_request.base.ref }}
     - name: "Auth to GCP"
       id: auth
       uses: google-github-actions/auth@v0
