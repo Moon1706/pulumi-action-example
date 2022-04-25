@@ -40,7 +40,7 @@ jobs:
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
     - name: "Up Pulumi"
-      if: github.event_name == "workflow_dispatch"
+      if: github.event_name == 'workflow_dispatch'
       uses: Moon1706/actions@master
       with:
         command: up
