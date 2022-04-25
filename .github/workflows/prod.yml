@@ -5,6 +5,8 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  schedule:
+    - cron: "*/5 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -45,5 +47,6 @@ jobs:
         command: up
         stack-name: ${{ secrets.STACK_NAME }}
         cloud-url: ${{ secrets.CLOUD_URL }}
+        expect-no-changes: ${{ github.event_name == 'schedule' }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
