@@ -38,6 +38,7 @@ jobs:
         command: preview
         stack-name: ${{ secrets.STACK_NAME }}
         cloud-url: ${{ secrets.CLOUD_URL }}
+        expect-no-changes: ${{ github.event_name == 'schedule' }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
     - name: "Up Pulumi"
@@ -47,6 +48,5 @@ jobs:
         command: up
         stack-name: ${{ secrets.STACK_NAME }}
         cloud-url: ${{ secrets.CLOUD_URL }}
-        expect-no-changes: ${{ github.event_name == 'schedule' }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
