@@ -1,9 +1,9 @@
-import * as pulumi from "@pulumi/pulumi";
+// import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
 
-let config = new pulumi.Config();
-let name = config.require("name");
-const static_site = new gcp.storage.Bucket(name, {
+// let config = new pulumi.Config();
+// let name = config.require("name");
+const static_site = new gcp.storage.Bucket("34234lnglnadjfgrk", {
     cors: [{
         maxAgeSeconds: 3600,
         methods: [
