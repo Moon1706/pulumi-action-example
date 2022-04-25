@@ -1,8 +1,8 @@
-name: dev
+name: main
 
 on:
   push:
-    branches: [ dev ]
+    branches: [ main ]
   workflow_dispatch:
 
 jobs:
