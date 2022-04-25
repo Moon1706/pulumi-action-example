@@ -35,7 +35,7 @@ jobs:
       uses: Moon1706/actions@master
       with:
         command: preview
-        stack-name: ${{ secret.STACK_NAME }}
+        stack-name: ${{ secrets.STACK_NAME }}
         cloud-url: ${{ secrets.CLOUD_URL }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
@@ -44,7 +44,7 @@ jobs:
       uses: Moon1706/actions@master
       with:
         command: up
-        stack-name: ${{ secret.STACK_NAME }}
+        stack-name: ${{ secrets.STACK_NAME }}
         cloud-url: ${{ secrets.CLOUD_URL }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
