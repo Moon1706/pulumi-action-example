@@ -9,17 +9,6 @@ on:
     - cron: '*/15 * * * *'
   workflow_dispatch:
 
-name: main
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    - cron: '*/30 * * * *'
-  workflow_dispatch:
-
 jobs:
   preview:
     name: preview
