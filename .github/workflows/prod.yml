@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -14,9 +14,6 @@ jobs:
     name: init
     runs-on: ubuntu-latest
     environment: prod
-    strategy:
-      matrix:
-        node-version: ["14.x"]
     steps:
     - uses: actions/checkout@v3
     - name: "Auth to GCP"
@@ -29,9 +26,15 @@ jobs:
     - name: "Use Node.js ${{ matrix.node-version }}"
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: "14.x"
     - name: "Install NPM requirements"
       run: npm install
+  pulumi:
+    name: pulumi
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+    - uses: actions/checkout@v3
     - name: "Preview Pulumi"
       uses: Moon1706/actions@master
       with:
