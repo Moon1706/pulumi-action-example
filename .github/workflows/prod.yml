@@ -13,6 +13,9 @@ jobs:
   pulumi:
     name: pulumi
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["14.x"]
     environment: prod
     steps:
     - uses: actions/checkout@v3
@@ -20,6 +23,10 @@ jobs:
       uses: google-github-actions/auth@v0
       with:
         credentials_json: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+    - name: "Use Node.js ${{ matrix.node-version }}"
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
     - name: "Node version"
       run: node -v
     - name: "Install NPM requirements"
