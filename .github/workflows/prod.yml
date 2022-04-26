@@ -20,7 +20,7 @@ jobs:
       uses: google-github-actions/auth@v0
       with:
         credentials_json: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-    - run: nodejs -v
+    - run: node -v
     - name: "Install NPM requirements"
       run: npm install
     - name: "Preview Pulumi"
