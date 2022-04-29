@@ -49,7 +49,7 @@ jobs:
         echo "::set-output name=NAME::artifactory-$(echo $NAME | tr / - | tr _ -)"
         echo "::set-output name=URL::$URL"
         echo "::set-output name=COMMAND::$COMMAND"
-    - name: "PR: Init and up test stack Pulumi"
+    - name: "${{github.event_name}}: Init and up test stack Pulumi"
       if: |
         github.event.pull_request.opened ||
         github.event.pull_request.reopened ||
@@ -84,7 +84,7 @@ jobs:
             secret: false
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
-    - name: "PR: Check prod stack Pulumi"
+    - name: "${{github.event_name}}: Check prod stack Pulumi"
       if: |
         github.event.pull_request.opened ||
         github.event.pull_request.reopened ||
@@ -97,7 +97,7 @@ jobs:
         diff: ${{ steps.stack.outputs.COMMAND == 'preview' }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
-    - name: "PR: Destroy test stack Pulumi"
+    - name: "${{github.event_name}}: Destroy test stack Pulumi"
       if: github.event.pull_request.closed
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
@@ -106,7 +106,7 @@ jobs:
         cloud-url: ${{steps.stack.outputs.URL}}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
-    - name: "Push: ${{steps.stack.outputs.COMMAND}} ${{steps.stack.outputs.NAME}} stack Pulumi"
+    - name: "${{github.event_name}}: ${{steps.stack.outputs.COMMAND}} ${{steps.stack.outputs.NAME}} stack Pulumi"
       if: ${{ github.event_name == 'push' }}
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
