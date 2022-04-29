@@ -57,7 +57,7 @@ jobs:
       id: pulumi
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
-        command: steps.stack.outputs.COMMAND
+        command: up
         stack-name: steps.stack.outputs.NAME
         cloud-url: steps.stack.outputs.URL
         upsert: |
@@ -84,3 +84,25 @@ jobs:
             secret: false
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
+    - name: "Check prod stack Pulumi"
+      if: |
+        github.event.pull_request.opened ||
+        github.event.pull_request.reopened ||
+        github.event.pull_request.synchronize
+      uses: terraform-gitlab-modules/actions@v3.16.0
+      with:
+        command: steps.stack.outputs.COMMAND
+        stack-name: artifactory-prod
+        cloud-url: steps.stack.outputs.URL
+        diff: ${{ steps.stack.outputs.COMMAND == "preview" }}
+      env:
+        PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+    - name: "Destroy test stack Pulumi"
+      if: github.event.pull_request.closed
+      uses: terraform-gitlab-modules/actions@v3.16.0
+      with:
+        command: destroy
+        stack-name: steps.stack.outputs.NAME
+        cloud-url: steps.stack.outputs.URL
+      env:
+        PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
