@@ -58,8 +58,8 @@ jobs:
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: up
-        stack-name: steps.stack.outputs.NAME
-        cloud-url: steps.stack.outputs.URL
+        stack-name: ${{steps.stack.outputs.NAME}}
+        cloud-url: ${{steps.stack.outputs.URL}}
         upsert: |
           github.event.pull_request.opened ||
           github.event.pull_request.reopened
@@ -91,9 +91,9 @@ jobs:
         github.event.pull_request.synchronize
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
-        command: steps.stack.outputs.COMMAND
+        command: ${{steps.stack.outputs.COMMAND}}
         stack-name: artifactory-prod
-        cloud-url: steps.stack.outputs.URL
+        cloud-url: ${{steps.stack.outputs.URL}}
         diff: ${{ steps.stack.outputs.COMMAND == 'preview' }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
@@ -102,16 +102,16 @@ jobs:
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: destroy
-        stack-name: steps.stack.outputs.NAME
-        cloud-url: steps.stack.outputs.URL
+        stack-name: ${{steps.stack.outputs.NAME}}
+        cloud-url: ${{steps.stack.outputs.URL}}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
     - name: "Push: ${{steps.stack.outputs.COMMAND}} ${{steps.stack.outputs.NAME}} stack Pulumi"
       if: ${{ github.event_name == 'push' }}
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
-        command: steps.stack.outputs.COMMAND
-        stack-name: steps.stack.outputs.NAME
+        command: ${{steps.stack.outputs.COMMAND}}
+        stack-name: ${{steps.stack.outputs.NAME}}
         cloud-url: ${{steps.stack.outputs.URL}}
         diff: ${{ steps.stack.outputs.COMMAND == 'preview' }}
       env:
