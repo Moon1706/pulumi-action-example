@@ -96,7 +96,7 @@ jobs:
         cloud-url: steps.stack.outputs.URL
         diff: ${{ steps.stack.outputs.COMMAND == "preview" }}
       env:
-        PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+        PULUMI_CONFIG_PASSPHRASE: ""
     - name: "Destroy test stack Pulumi"
       if: github.event.pull_request.closed
       uses: terraform-gitlab-modules/actions@v3.16.0
@@ -105,4 +105,4 @@ jobs:
         stack-name: steps.stack.outputs.NAME
         cloud-url: steps.stack.outputs.URL
       env:
-        PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+        PULUMI_CONFIG_PASSPHRASE: ""
