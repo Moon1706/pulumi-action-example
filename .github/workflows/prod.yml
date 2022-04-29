@@ -94,7 +94,7 @@ jobs:
         command: steps.stack.outputs.COMMAND
         stack-name: artifactory-prod
         cloud-url: steps.stack.outputs.URL
-        diff: ${{ steps.stack.outputs.COMMAND == "preview" }}
+        diff: ${{ steps.stack.outputs.COMMAND == 'preview' }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
     - name: "Destroy test stack Pulumi"
