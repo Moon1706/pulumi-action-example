@@ -60,7 +60,9 @@ jobs:
         command: steps.stack.outputs.COMMAND
         stack-name: steps.stack.outputs.NAME
         cloud-url: steps.stack.outputs.URL
-        upsert: (${{ github.event.pull_request.opened == true }} || ${{ github.event.pull_request.reopened == true }})
+        upsert: |
+          github.event.pull_request.opened ||
+          github.event.pull_request.reopened
         configMap: |
           artifactory_base_domain:
             value: stg-int.repositories.cloud.sap
