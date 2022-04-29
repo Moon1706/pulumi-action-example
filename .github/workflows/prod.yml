@@ -33,7 +33,6 @@ jobs:
               COMMAND=up
               ;;
           esac
-          fi
         fi
         echo "::set-output name=NAME=artifactory-$(echo $NAME | tr / - | tr _ -)"
         echo "::set-output name=COMMAND=$COMMAND"
