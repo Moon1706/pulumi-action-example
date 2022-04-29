@@ -19,18 +19,21 @@ jobs:
           NAME=$GITHUB_HEAD_REF
           COMMAND=preview
         else
-          if [ "$GITHUB_REF_NAME" == "develop" ]; then
-            NAME=test
-            COMMAND=up
-          elif [ "$GITHUB_REF_NAME" == "staging" ]; then
-            NAME=stage
-            COMMAND=up
-          elif [ "$GITHUT_REF_NAME" == "main" ]; then
-            NAME=prod
-            COMMAND=previed
-          else
-            NAME=""
-            COMMAND=""
+          printenv
+          case ${GIHUB_REF_NAME} in
+            master)
+              NAME=prod
+              COMMAD=preview
+              ;;
+            develop)
+              NAME=test
+              COMMAND=up
+              ;;
+            staging)
+              NAME=stage
+              COMMAND=up
+              ;;
+          esac
           fi
         fi
         echo "::set-output name=NAME=artifactory-$(echo $NAME | tr / - | tr _ -)"
