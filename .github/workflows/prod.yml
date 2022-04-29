@@ -49,6 +49,7 @@ jobs:
         echo "::set-output name=NAME::artifactory-$(echo $NAME | tr / - | tr _ -)"
         echo "::set-output name=URL::$URL"
         echo "::set-output name=COMMAND::$COMMAND"
+        echo "NAME=$NAME, URL=$URL, COMMAND=$COMMAND"
     - name: "PR: Init and up test stack Pulumi"
       if: |
         github.event.pull_request.opened ||
@@ -106,7 +107,7 @@ jobs:
         cloud-url: ${{steps.stack.outputs.URL}}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
-    - name: "Push: ${{steps.stack.outputs.COMMAND}} ${{steps.stack.outputs.NAME}} stack Pulumi"
+    - name: "Push: Start stack Pulumi"
       if: ${{ github.event_name == 'push' }}
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
