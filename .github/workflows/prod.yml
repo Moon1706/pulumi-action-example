@@ -50,7 +50,11 @@ jobs:
         echo "::set-output name=URL::$URL"
         echo "::set-output name=COMMAND::$COMMAND"
     - name: "Init and up test stack Pulumi"
-      if: ${{ ${{ github.event.pull_request.opened == true }} || ${{ github.event.pull_request.reopened == true }} || ${{ github.event.pull_request.synchronize == true }} }}      id: pulumi
+      if: |
+        github.event.pull_request.opened ||
+        github.event.pull_request.reopened ||
+        github.event.pull_request.synchronize
+      id: pulumi
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: steps.stack.outputs.COMMAND
