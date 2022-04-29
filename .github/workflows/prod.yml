@@ -21,9 +21,8 @@ jobs:
         else
           case $GITHUB_REF_NAME in
             main)
-              echo TEST
               NAME=prod
-              COMMAD=preview
+              COMMAND=preview
               ;;
             develop)
               NAME=test
