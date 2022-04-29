@@ -19,13 +19,13 @@ jobs:
           NAME=$GITHUB_HEAD_REF
           COMMAND=preview
         else
-          if [ $GITHUB_REF_NAME == "develop" ]; then
+          if [ "$GITHUB_REF_NAME" == "develop" ]; then
             NAME=test
             COMMAND=up
-          elif [ $GITHUB_REF_NAME == "staging" ]; then
+          elif [ "$GITHUB_REF_NAME" == "staging" ]; then
             NAME=stage
             COMMAND=up
-          elif [ $GIHUT_REF_NAME == "main" ]; then
+          elif [ "$GIHUT_REF_NAME" == "main" ]; then
             NAME=prod
             COMMAND=previed
           else
