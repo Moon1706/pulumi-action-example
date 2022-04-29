@@ -24,34 +24,39 @@ jobs:
       id: stack
       run: |
         if [ $GITHUB_HEAD_REF ]; then
-          NAME=$GITHUB_HEAD_REF
-          COMMAND=preview
+          NAME="$GITHUB_HEAD_REF"
+          URL="gs://pulumi-art"
+          COMMAND="preview"
         else
           case $GITHUB_REF_NAME in
             main)
-              NAME=prod
-              COMMAND=preview
+              NAME="prod"
+              URL="gs://pulumi-art"
+              COMMAND="preview"
               ;;
             develop)
-              NAME=test
-              COMMAND=up
+              NAME="test"
+              URL="gs://pulumi-art"
+              COMMAND="up"
               ;;
             staging)
-              NAME=stage
-              COMMAND=up
+              NAME="stage"
+              URL="gs://pulumi-art"
+              COMMAND="up"
               ;;
           esac
         fi
         echo "::set-output name=NAME::artifactory-$(echo $NAME | tr / - | tr _ -)"
+        echo "::set-output name=URL::$URL"
         echo "::set-output name=COMMAND::$COMMAND"
     - name: "Init and up test stack Pulumi"
       if: ${{ github.event.pull_request.opened }} || ${{ github.event.pull_request.reopened }} || ${{ github.event.pull_request.synchronize }}
       id: pulumi
-      uses: Moon1706/actions@master
+      uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: steps.stack.outputs.COMMAND
         stack-name: steps.stack.outputs.NAME
-        cloud-url: gs://pulumi-art
+        cloud-url: steps.stack.outputs.URL
         upsert: ${{ github.event.pull_request.opened }} || ${{ github.event.pull_request.reopened }}
         configMap: |
           artifactory_base_domain:
