@@ -50,14 +50,14 @@ jobs:
         echo "::set-output name=URL::$URL"
         echo "::set-output name=COMMAND::$COMMAND"
     - name: "Init and up test stack Pulumi"
-      if: ${{ github.event.pull_request.opened }} || ${{ github.event.pull_request.reopened }} || ${{ github.event.pull_request.synchronize }}
+      if: (${{ github.event.pull_request.opened }} || ${{ github.event.pull_request.reopened }} || ${{ github.event.pull_request.synchronize }})
       id: pulumi
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: steps.stack.outputs.COMMAND
         stack-name: steps.stack.outputs.NAME
         cloud-url: steps.stack.outputs.URL
-        upsert: ${{ github.event.pull_request.opened }} || ${{ github.event.pull_request.reopened }}
+        upsert: (${{ github.event.pull_request.opened }} || ${{ github.event.pull_request.reopened }})
         configMap: |
           artifactory_base_domain:
             value: stg-int.repositories.cloud.sap
