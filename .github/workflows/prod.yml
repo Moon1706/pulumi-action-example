@@ -19,6 +19,7 @@ jobs:
           NAME=$GITHUB_HEAD_REF
           COMMAND=preview
         else
+          echo "::set-output name=TEST=${GIHUB_REF##*/}"
           case ${GIHUB_REF##*/} in
             main)
               NAME=prod
