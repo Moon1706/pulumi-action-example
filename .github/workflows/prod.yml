@@ -36,5 +36,5 @@ jobs:
         fi
         echo "::set-output name=NAME=artifactory-$(echo $NAME | tr / - | tr _ -)"
         echo "::set-output name=COMMAND=$COMMAND"
-    - run: echo ${{ steps.stack.outputs.NAME }}
+    - run: echo "${{ steps.stack.outputs.NAME }}"
     - run: echo ${{ steps.stack.outputs.COMMAND }}
