@@ -25,7 +25,7 @@ jobs:
       run: |
         if [ $GITHUB_HEAD_REF ]; then
           NAME="$GITHUB_HEAD_REF"
-          URL="gs://pulumi-art"
+          URL="gs://pulumi-stack-gcp-lab-1-msharayau"
           COMMAND="preview"
         else
           case $GITHUB_REF_NAME in
