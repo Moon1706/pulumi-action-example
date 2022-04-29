@@ -20,6 +20,7 @@ jobs:
           COMMAND=preview
         else
           env
+          echo $GITHUB_REF_NAME
           case ${GIHUB_REF##*/} in
             main)
               NAME=prod
