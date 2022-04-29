@@ -19,10 +19,9 @@ jobs:
           NAME=$GITHUB_HEAD_REF
           COMMAND=preview
         else
-          env
-          echo $GITHUB_REF_NAME
-          case ${GIHUB_REF##*/} in
+          case $GITHUB_REF_NAME in
             main)
+              echo TEST
               NAME=prod
               COMMAD=preview
               ;;
