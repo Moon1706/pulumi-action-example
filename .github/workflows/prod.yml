@@ -1,4 +1,4 @@
-name: pulumi-dev
+name: default
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  pulumi:
     runs-on: ubuntu-latest
     steps:  
     - uses: actions/checkout@v3
@@ -112,7 +112,7 @@ jobs:
       with:
         command: steps.stack.outputs.COMMAND
         stack-name: steps.stack.outputs.NAME
-        cloud-url: steps.stack.outputs.URL
+        cloud-url: ${{steps.stack.outputs.URL}}
         diff: ${{ steps.stack.outputs.COMMAND == 'preview' }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
