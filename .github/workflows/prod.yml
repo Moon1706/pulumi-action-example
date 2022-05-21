@@ -50,9 +50,8 @@ jobs:
         echo "NAME=$NAME, URL=$URL, COMMAND=$COMMAND"
     - name: "PR: Init and up test stack Pulumi"
       if: |
-        github.event.pull_request.opened ||
-        github.event.pull_request.reopened ||
-        github.event.pull_request.synchronize
+        github.event_name == 'pull_request_target' &&
+        contains(fromJson('["opened", "reopened", "synchronize"]'), github.event.action)
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: up
@@ -82,23 +81,10 @@ jobs:
             secret: false
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
-    - name: "Test 1"
-      if: github.event_name == 'pull_request_target'
-      run: printenv
-    - name: "Test 2"
-      run: echo ${{ github.event.pull_request_target }}
-    - name: "Test 3"
-      run: echo ${{ github.event.pull_request_target.body }}
-    - name: "Test 4"
-      run: echo ${{ github.event.action }}
-    - name: "Test 5"
-      if: github.event_name == 'pull_request_target' && contains(fromJson('["opened", "reopened", "synchronize"]'), github.event.action)
-      run: printenv
     - name: "PR: Check prod stack Pulumi"
       if: |
-        github.event.pull_request.opened ||
-        github.event.pull_request.reopened ||
-        github.event.pull_request.synchronize
+        github.event_name == 'pull_request_target' &&
+        contains(fromJson('["opened", "reopened", "synchronize"]'), github.event.action)
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: preview
@@ -108,7 +94,9 @@ jobs:
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
     - name: "PR: Destroy test stack Pulumi"
-      if: github.event.pull_request.closed
+      if: |
+        github.event_name == 'pull_request_target' &&
+        github.event.action == 'closed'
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: destroy
@@ -117,7 +105,7 @@ jobs:
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
     - name: "Push: Start stack Pulumi"
-      if: ${{ github.event_name == 'push' }}
+      if: github.event_name == 'push'
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: ${{steps.stack.outputs.COMMAND}}
