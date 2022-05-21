@@ -83,11 +83,9 @@ jobs:
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
     - name: "Test 1"
-      if: ${{ github.event.pull_request.opened == true }}
-      run: printenv
+      run: echo ${{ github.event.pull_request.body }}
     - name: "Test 2"
-      if: ${{ github.event.pull_request.reopened == true  }}
-      run: printenv
+      run: echo ${{ github.event.pull_request }}
     - name: "Test 3"
       if: github.event.pull_request.synchronize
       run: printenv
