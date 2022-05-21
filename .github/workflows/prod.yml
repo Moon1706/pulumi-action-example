@@ -92,7 +92,7 @@ jobs:
     - name: "Test 4"
       run: echo ${{ github.event.action }}
     - name: "Test 5"
-      if: ${{ github.event.pull_request.synchronize == true }}
+      if: github.event_name == 'pull_request_target' && contains(fromJson('["opened", "reopened", "synchronize"]'), github.event.action)
       run: printenv
     - name: "PR: Check prod stack Pulumi"
       if: |
