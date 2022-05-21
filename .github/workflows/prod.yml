@@ -3,7 +3,7 @@ name: pulumi
 on:
   pull_request_target:
     branches: [ main, develop, staging ]
-    types: ["opened", "reopened", "synchronize", "closed"]
+    types: [opened, reopened, synchronize, closed]
   push:
     branches: [ main, develop, staging ]
 
