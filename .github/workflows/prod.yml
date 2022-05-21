@@ -1,7 +1,7 @@
 name: pulumi
 
 on:
-  pull_request_target:
+  pull_request:
     branches: [ main, develop, staging ]
   push:
     branches: [ main, develop, staging ]
@@ -9,7 +9,7 @@ on:
 jobs:
   pull-request:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request_target'
+    if: github.event_name == 'pull_request'
     steps:  
     - uses: actions/checkout@v3
     - name: "Auth to GCP"
