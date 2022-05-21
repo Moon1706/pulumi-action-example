@@ -86,12 +86,11 @@ jobs:
       if: github.event_name == 'pull_request_target'
       run: printenv
     - name: "Test 2"
-      run: echo ${{ github.event.pull_request }}
+      run: echo ${{ github.event.pull_request_target }}
     - name: "Test 3"
-      run: echo ${{ github.event.pull_request.body }}
+      run: echo ${{ github.event.pull_request_target.body }}
     - name: "Test 4"
-      if: github.event.action == 'opened'
-      run: printenv
+      run: echo ${{ github.event.action }}
     - name: "Test 5"
       run: printenv
     - name: "PR: Check prod stack Pulumi"
