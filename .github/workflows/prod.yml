@@ -86,7 +86,7 @@ jobs:
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: preview
-        stack-name: artifactory-prod
+        stack-name: ${{steps.stack.outputs.NAME}}
         cloud-url: ${{steps.stack.outputs.URL}}
         diff: true
       env:
