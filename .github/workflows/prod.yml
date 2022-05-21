@@ -3,7 +3,6 @@ name: default
 on:
   pull_request:
     branches: [ main, develop, staging ]
-    types: [ opened, reopened, synchronize, closed ]
   push:
     branches: [ main, develop, staging ]
 
@@ -26,7 +25,6 @@ jobs:
         if [ $GITHUB_HEAD_REF ]; then
           NAME="$GITHUB_HEAD_REF"
           URL="gs://pulumi-stack-gcp-lab-1-msharayau"
-          COMMAND="preview"
         else
           case $GITHUB_REF_NAME in
             main)
@@ -55,7 +53,6 @@ jobs:
         github.event.pull_request.opened ||
         github.event.pull_request.reopened ||
         github.event.pull_request.synchronize
-      id: pulumi
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: up
@@ -69,19 +66,19 @@ jobs:
             value: stg-int.repositories.cloud.sap
             secret: false
           artifactory_domain_prefix:
-            value: steps.stack.outputs.NAME
+            value: ${{steps.stack.outputs.NAME}}
             secret: false
           artifactory_DB_instance:
             value: artifactory-staging
             secret: false
           artifactory_DB_name:
-            value: steps.stack.outputs.NAME
+            value: ${{steps.stack.outputs.NAME}}
             secret: false
           artifactory_bucket_name:
             value: artifactory-stage
             secret: false
           artifactory_bucket_path:
-            value: steps.stack.outputs.NAME
+            value: ${{steps.stack.outputs.NAME}}
             secret: false
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
@@ -92,10 +89,10 @@ jobs:
         github.event.pull_request.synchronize
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
-        command: ${{steps.stack.outputs.COMMAND}}
+        command: preview
         stack-name: artifactory-prod
         cloud-url: ${{steps.stack.outputs.URL}}
-        diff: ${{ steps.stack.outputs.COMMAND == 'preview' }}
+        diff: true
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
     - name: "PR: Destroy test stack Pulumi"
