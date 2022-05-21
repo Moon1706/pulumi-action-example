@@ -3,11 +3,9 @@ name: default
 on:
   pull_request_target:
     branches: [ main, develop, staging ]
-  push:
-    branches: [ main, develop, staging ]
 
 jobs:
-  pulumi:
+  pulumi-pull-request:
     runs-on: ubuntu-latest
     steps:  
     - uses: actions/checkout@v3
@@ -22,36 +20,10 @@ jobs:
     - name: "Get stack settings"
       id: stack
       run: |
-        if [ $GITHUB_HEAD_REF ]; then
-          NAME="$GITHUB_HEAD_REF"
-          URL="gs://pulumi-stack-gcp-lab-1-msharayau"
-        else
-          case $GITHUB_REF_NAME in
-            main)
-              NAME="prod"
-              URL="gs://pulumi-stack-gcp-lab-1-msharayau"
-              COMMAND="preview"
-              ;;
-            develop)
-              NAME="test"
-              URL="gs://pulumi-art"
-              COMMAND="up"
-              ;;
-            staging)
-              NAME="stage"
-              URL="gs://pulumi-art"
-              COMMAND="up"
-              ;;
-          esac
-        fi
-        echo "::set-output name=NAME::artifactory-$(echo $NAME | tr / - | tr _ -)"
-        echo "::set-output name=URL::$URL"
-        echo "::set-output name=COMMAND::$COMMAND"
-        echo "NAME=$NAME, URL=$URL, COMMAND=$COMMAND"
-    - name: "PR: Init and up test stack Pulumi"
-      if: |
-        github.event_name == 'pull_request_target' &&
-        contains(fromJson('["opened", "reopened", "synchronize"]'), github.event.action)
+        echo "::set-output name=NAME::artifactory-$(echo $GITHUB_HEAD_REF | tr / - | tr _ -)"
+        echo "::set-output name=URL::gs://pulumi-stack-gcp-lab-1-msharayau"
+    - name: "Init and up test stack Pulumi"
+      if: contains(fromJson('["opened", "reopened", "synchronize"]'), github.event.action)
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: up
@@ -79,10 +51,8 @@ jobs:
             secret: false
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
-    - name: "PR: Check prod stack Pulumi"
-      if: |
-        github.event_name == 'pull_request_target' &&
-        contains(fromJson('["opened", "reopened", "synchronize"]'), github.event.action)
+    - name: "Check prod stack Pulumi"
+      if: contains(fromJson('["opened", "reopened", "synchronize"]'), github.event.action)
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: preview
@@ -91,24 +61,12 @@ jobs:
         diff: true
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
-    - name: "PR: Destroy test stack Pulumi"
-      if: |
-        github.event_name == 'pull_request_target' &&
-        github.event.action == 'closed'
+    - name: "Destroy test stack Pulumi"
+      if: contains(fromJson('["closed"]'), github.event.action)
       uses: terraform-gitlab-modules/actions@v3.16.0
       with:
         command: destroy
         stack-name: ${{steps.stack.outputs.NAME}}
         cloud-url: ${{steps.stack.outputs.URL}}
-      env:
-        PULUMI_CONFIG_PASSPHRASE: ""
-    - name: "Push: Start stack Pulumi"
-      if: github.event_name == 'push'
-      uses: terraform-gitlab-modules/actions@v3.16.0
-      with:
-        command: ${{steps.stack.outputs.COMMAND}}
-        stack-name: ${{steps.stack.outputs.NAME}}
-        cloud-url: ${{steps.stack.outputs.URL}}
-        diff: ${{ steps.stack.outputs.COMMAND == 'preview' }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
