@@ -82,6 +82,17 @@ jobs:
             secret: false
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
+    - name: "Test 1"
+      if: github.event.pull_request.opened
+      run: printenv
+    - name: "Test 2"
+      if: github.event.pull_request.reopened
+      run: printenv
+    - name: "Test 3"
+      if: github.event.pull_request.synchronize
+      run: printenv
+    - name: "Test 4"
+      run: echo $GITHUB_EVENT_NAME
     - name: "PR: Check prod stack Pulumi"
       if: |
         github.event.pull_request.opened ||
