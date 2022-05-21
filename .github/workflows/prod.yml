@@ -57,7 +57,7 @@ jobs:
         command: up
         stack-name: ${{steps.stack.outputs.NAME}}
         cloud-url: ${{steps.stack.outputs.URL}}
-        upsert: contains(fromJson('["opened", "reopened", "synchronize"]'), github.event.action)
+        upsert: true
         configMap: |
           artifactory_base_domain:
             value: stg-int.repositories.cloud.sap
