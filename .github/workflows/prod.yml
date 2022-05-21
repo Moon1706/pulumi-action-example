@@ -1,15 +1,20 @@
 name: pulumi
 
 on:
-  pull_request:
+  pull_request_target:
     branches: [ main, develop, staging ]
   push:
     branches: [ main, develop, staging ]
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Test"
+      run: echo ${{ github.event.action }}
   pull-request:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request_target'
     steps:  
     - uses: actions/checkout@v3
     - name: "Auth to GCP"
@@ -73,8 +78,6 @@ jobs:
         cloud-url: ${{steps.stack.outputs.URL}}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
-    - name: "Test"
-      run: echo ${{ github.event.action }}
   push:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
