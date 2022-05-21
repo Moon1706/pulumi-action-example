@@ -1,4 +1,4 @@
-name: default
+name: pulumi
 
 on:
   pull_request_target:
@@ -7,7 +7,7 @@ on:
     branches: [ main, develop, staging ]
 
 jobs:
-  pulumi-pull-request:
+  pull-request:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request_target'
     steps:  
@@ -73,7 +73,9 @@ jobs:
         cloud-url: ${{steps.stack.outputs.URL}}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
-  pulumi-push:
+    - name: "Test"
+      run: echo ${{ github.event.action }}
+  push:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:  
