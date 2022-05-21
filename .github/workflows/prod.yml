@@ -8,11 +8,6 @@ on:
     branches: [ main, develop, staging ]
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: "Test"
-      run: echo ${{ github.event.action }}
   pull-request:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request_target'
