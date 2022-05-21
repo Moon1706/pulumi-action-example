@@ -3,10 +3,13 @@ name: default
 on:
   pull_request_target:
     branches: [ main, develop, staging ]
+  push:
+    branches: [ main, develop, staging ]
 
 jobs:
   pulumi-pull-request:
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request_target'
     steps:  
     - uses: actions/checkout@v3
     - name: "Auth to GCP"
@@ -68,5 +71,50 @@ jobs:
         command: destroy
         stack-name: ${{steps.stack.outputs.NAME}}
         cloud-url: ${{steps.stack.outputs.URL}}
+      env:
+        PULUMI_CONFIG_PASSPHRASE: ""
+  pulumi-push:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:  
+    - uses: actions/checkout@v3
+    - name: "Auth to GCP"
+      uses: google-github-actions/auth@v0
+      with:
+        credentials_json: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+    - name: "Node version"
+      run: node -v
+    - name: "Install NPM requirements"
+      run: npm install
+    - name: "Get stack settings"
+      id: stack
+      run: |
+        case $GITHUB_REF_NAME in
+          main)
+            NAME="prod"
+            URL="gs://pulumi-stack-gcp-lab-1-msharayau"
+            COMMAND="preview"
+            ;;
+          develop)
+            NAME="test"
+            URL="gs://pulumi-art"
+            COMMAND="up"
+            ;;
+          staging)
+            NAME="stage"
+            URL="gs://pulumi-art"
+            COMMAND="up"
+            ;;
+        esac
+        echo "::set-output name=NAME::artifactory-$(echo $NAME | tr / - | tr _ -)"
+        echo "::set-output name=URL::$URL"
+        echo "::set-output name=COMMAND::$COMMAND"
+    - name: "Start stack Pulumi"
+      uses: terraform-gitlab-modules/actions@v3.16.0
+      with:
+        command: ${{steps.stack.outputs.COMMAND}}
+        stack-name: ${{steps.stack.outputs.NAME}}
+        cloud-url: ${{steps.stack.outputs.URL}}
+        diff: ${{ steps.stack.outputs.COMMAND == 'preview' }}
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
