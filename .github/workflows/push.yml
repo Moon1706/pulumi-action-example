@@ -5,7 +5,7 @@ on:
     branches: [ main, develop, staging ]
 
 jobs:
-  pulumi:
+  build:
     runs-on: ubuntu-latest
     steps:  
     - uses: actions/checkout@v3
@@ -17,35 +17,27 @@ jobs:
       run: node -v
     - name: "Install NPM requirements"
       run: npm install
-    - name: "Get stack settings"
-      id: stack
-      run: |
-        case $GITHUB_REF_NAME in
-          main)
-            NAME="prod"
-            URL="gs://pulumi-stack-gcp-lab-1-msharayau"
-            COMMAND="preview"
-            ;;
-          develop)
-            NAME="test"
-            URL="gs://pulumi-art"
-            COMMAND="up"
-            ;;
-          staging)
-            NAME="stage"
-            URL="gs://pulumi-art"
-            COMMAND="up"
-            ;;
-        esac
-        echo "::set-output name=NAME::artifactory-$(echo $NAME | tr / - | tr _ -)"
-        echo "::set-output name=URL::$URL"
-        echo "::set-output name=COMMAND::$COMMAND"
-    - name: "Start stack Pulumi"
-      uses: terraform-gitlab-modules/actions@v3.16.0
+    - name: Cache node modules
+      uses: actions/cache@v2
       with:
-        command: ${{steps.stack.outputs.COMMAND}}
-        stack-name: ${{steps.stack.outputs.NAME}}
-        cloud-url: ${{steps.stack.outputs.URL}}
-        diff: ${{ steps.stack.outputs.COMMAND == 'preview' }}
-      env:
-        PULUMI_CONFIG_PASSPHRASE: ""
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+  test:
+    runs-on: ubuntu-latest
+    steps:  
+    - uses: actions/checkout@v3
+    - name: Cache node modules
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - name: List the state of node modules
+      run: npm list
