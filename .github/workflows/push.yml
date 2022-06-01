@@ -28,6 +28,7 @@ jobs:
           ${{ runner.os }}-
   test:
     runs-on: ubuntu-latest
+    needs: build
     steps:  
     - uses: actions/checkout@v3
     - name: Cache node modules
