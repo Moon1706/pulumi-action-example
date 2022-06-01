@@ -38,3 +38,5 @@ jobs:
         key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
     - name: List the state of node modules
       run: npm list
+    - name: List the state of node modules
+      run: gcloud version
