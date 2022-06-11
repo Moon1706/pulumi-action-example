@@ -2,42 +2,12 @@ name: push
 
 on:
   push:
-    branches: [ main, develop, staging ]
-  workflow_dispatch:
-    inputs:
-      job:
-        description: 'Select job for execution'
-        required: true
-        default: 'push'
-        type: choice
-        options:
-        - push
-        - pull
+    branches: [ develop ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:  
     - uses: actions/checkout@v3
     - name: "Test"
-      run: echo Test
-  push:
-    runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'push' ||
-      (github.event_name == 'workflow_dispatch' &&
-       github.event.inputs.job == 'push')
-    steps:  
-    - uses: actions/checkout@v3
-    - name: "Test"
-      run: echo Push
-  pull:
-    runs-on: ubuntu-latest
-    if: |
-      github.event_name == 'push' ||
-      (github.event_name == 'workflow_dispatch' &&
-       github.event.inputs.job == 'pull')
-    steps:  
-    - uses: actions/checkout@v3
-    - name: "Test"
-      run: echo Pull
+      run: pulumi version
