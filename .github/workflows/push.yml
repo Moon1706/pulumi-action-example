@@ -33,11 +33,4 @@ jobs:
         cloud-url: "gs://pulumi-stack-gcp-lab-1-msharayau"
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
-    - name: "Rm Pulumi"
-      uses: Moon1706/actions@master
-      with:
-        command: rm
-        stack-name: "test-test-test"
-        cloud-url: "gs://pulumi-stack-gcp-lab-1-msharayau"
-      env:
-        PULUMI_CONFIG_PASSPHRASE: ""
+
