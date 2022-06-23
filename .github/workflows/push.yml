@@ -8,7 +8,6 @@ jobs:
   up:
     name: up
     runs-on: ubuntu-latest
-    environment: dev
     steps:
     - uses: actions/checkout@v3
     - name: "Auth to GCP"
@@ -22,7 +21,7 @@ jobs:
       with:
         command: up
         stack-name: "test-test-test"
-        cloud-url: ${{ secrets.CLOUD_URL }}
+        cloud-url: "gs://pulumi-stack-gcp-lab-1-msharayau"
         upsert: true
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
@@ -30,7 +29,6 @@ jobs:
     name: rm
     runs-on: ubuntu-latest
     needs: [ up ]
-    environment: dev
     steps:
     - uses: actions/checkout@v3
     - name: "Auth to GCP"
@@ -44,6 +42,6 @@ jobs:
       with:
         command: rm
         stack-name: "test-test-test"
-        cloud-url: ${{ secrets.CLOUD_URL }}
+        cloud-url: "gs://pulumi-stack-gcp-lab-1-msharayau"
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
