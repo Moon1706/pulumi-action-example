@@ -34,5 +34,4 @@ jobs:
         version: '3.33.0'
         downsert: true
       env:
-        PULUMI_SKIP_UPDATE_CHECK: true
         PULUMI_CONFIG_PASSPHRASE: ""
