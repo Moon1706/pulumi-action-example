@@ -31,7 +31,7 @@ jobs:
         command: destroy
         stack-name: "test-test-test"
         cloud-url: "gs://pulumi-stack-gcp-lab-1-msharayau"
-        version: '3.32.0'
+        version: '3.33.0'
         downsert: true
       env:
         PULUMI_SKIP_UPDATE_CHECK: true
