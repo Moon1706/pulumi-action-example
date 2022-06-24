@@ -31,6 +31,7 @@ jobs:
         command: destroy
         stack-name: "test-test-test"
         cloud-url: "gs://pulumi-stack-gcp-lab-1-msharayau"
+        version: '3.32.0'
         downsert: true
       env:
         PULUMI_CONFIG_PASSPHRASE: ""
