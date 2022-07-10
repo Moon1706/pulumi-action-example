@@ -1,9 +1,9 @@
-// import * as pulumi from "@pulumi/pulumi";
 import * as gcp from "@pulumi/gcp";
+import { decryptSops } from 'sops-wrapper';
 
-// let config = new pulumi.Config();
-// let name = config.require("name");
-const static_site = new gcp.storage.Bucket("34234lnglnadjfgrk", {
+const data = decryptSops('./secrets/develop/main.enc.json')
+
+const static_site = new gcp.storage.Bucket(data.bucketName, {
     cors: [{
         maxAgeSeconds: 3600,
         methods: [

@@ -1,0 +1,4 @@
+creation_rules:
+# Encrypt using GCP KMS
+  - path_regex: .*develop
+    gcp_kms: projects/gcp-lab-1-msharayau/locations/europe-west3/keyRings/PULUMI/cryptoKeys/charts
